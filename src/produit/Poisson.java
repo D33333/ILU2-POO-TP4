@@ -3,8 +3,8 @@ package produit;
 public class Poisson extends Produit{
 	private String datePeche;
 	
-	public Poisson(Unite unite, String datePeche) {
-		super("poisson", unite);
+	public Poisson(String datePeche) {
+		super("poisson", Unite.PARPIECE);
 		this.datePeche = datePeche;
 	}
 	
