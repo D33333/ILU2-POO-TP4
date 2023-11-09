@@ -1,6 +1,6 @@
 package produit;
 
-public class Poisson extends Produit{
+public class Poisson extends Produit implements IProduit{
 	private String datePeche;
 	
 	public Poisson(String datePeche) {
@@ -9,7 +9,7 @@ public class Poisson extends Produit{
 	}
 	
 	@Override
-	public String descriptionPdt() {
-		return super.getNomPdt()+" pêchés "+datePeche+'.';
+	public String description() {
+		return super.getNom()+" pêché "+datePeche;
 	}
 }

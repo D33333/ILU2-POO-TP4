@@ -1,7 +1,7 @@
 package produit;
 
 
-public abstract class Produit {
+public abstract class Produit implements IProduit {
 	private String nom;
 	private Unite unite;
 	
@@ -10,13 +10,21 @@ public abstract class Produit {
 		this.unite = unite;
 	}
 
-	public String getNomPdt() {
+	@Override
+	public String getNom() {
 		return nom;
 	}
 	
+	@Override
 	public Unite getUnite() {
 		return unite;
 	}
 	
-	public abstract String descriptionPdt();
+	@Override
+	public abstract String description();
+	
+	@Override
+	public double calculerPrix(int prix) {
+		return prix;
+	}
 }
