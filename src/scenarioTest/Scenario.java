@@ -2,25 +2,65 @@ package scenarioTest;
 
 import personnages.Gaulois;
 import produit.Poisson;
+import produit.Produit;
 import produit.Sanglier;
+import village.IVillage;
 import villagegaulois.Etal;
 import villagegaulois.IEtal;
+import villagegauloisold.DepenseMarchand;
 
 public class Scenario {
-
 	public static void main(String[] args) {
 
 		// TODO Partie 4 : creer de la classe anonyme Village
-		
+		IVillage village = new IVillage() {
+			
+			public static int nbEtalsNonVides = 0;
+			public static final IEtal[] MARCHE = new IEtal[3];
+			
+			@Override
+			public DepenseMarchand[] acheterProduit(String produit, int quantiteSouhaitee) {
+				DepenseMarchand[] depensesTots = new DepenseMarchand[3];
+				int nbAchats = 0;
+				int numEtalVu = 0;
+				while (numEtalVu != MARCHE.length && (quantiteSouhaitee-nbAchats > 0) && MARCHE[numEtalVu] != null) {
+					int qDispo = MARCHE[numEtalVu].contientProduit(produit, quantiteSouhaitee-nbAchats);
+					double prix = MARCHE[numEtalVu].acheterProduit(qDispo);
+					nbAchats += qDispo;
+					depensesTots[numEtalVu] = new DepenseMarchand(MARCHE[numEtalVu].getVendeur(), qDispo, produit, prix);
+					numEtalVu +=1;
+				}
+				return depensesTots;
+			}
+
+			@Override
+			public <P extends Produit> boolean installerVendeur(Etal<P> etal, Gaulois vendeur,
+					P[] produit, int prix) {
+				etal.installerVendeur(vendeur, produit, prix);
+				MARCHE[nbEtalsNonVides] = etal;
+				nbEtalsNonVides++;
+				return true;
+			}
+			
+			public String toString() {
+				StringBuilder afficherMarche = new StringBuilder();
+				for(IEtal etal : MARCHE) {
+					if (etal != null) {
+						afficherMarche.append(etal.etatEtal());
+					}
+				}
+				return afficherMarche.toString();
+			}
+		};
 		// fin
 
 		Gaulois ordralfabetix = new Gaulois("Ordralfabétix", 9);
 		Gaulois obelix = new Gaulois("Obélix", 20);
 		Gaulois asterix = new Gaulois("Astérix", 6);
 
-		IEtal etalSanglierObelix = new Etal<>();
-		IEtal etalSanglierAsterix = new Etal<>();
-		IEtal etalPoisson = new Etal<>();
+		Etal<Sanglier> etalSanglierObelix = new Etal<>();
+		Etal<Sanglier> etalSanglierAsterix = new Etal<>();
+		Etal<Poisson> etalPoisson = new Etal<>();
 
 		Sanglier sanglier1 = new Sanglier(2000, obelix);
 		Sanglier sanglier2 = new Sanglier(1500, obelix);
